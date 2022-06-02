@@ -1,0 +1,58 @@
+.colorCircle-ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 280px;
+  height: 200px;
+}
+
+.colorCircle-item {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: 20px;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.colorCircle-outline {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  border: 6px solid white;
+  border-radius: 50%;
+}
+
+
+.text-gradient {
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.paletteButton {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.paletteButton:hover {
+  /* transform :scale(1.5) rotate(200deg); */
+  animation: growRotate .5s ease forwards;
+}
+
+@keyframes growRotate {
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+
+  to {
+    transform: scale(1.5) rotate(-360deg);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  }
+}
