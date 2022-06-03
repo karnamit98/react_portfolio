@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStateContext } from './contexts/ContextProvider';
 // import './App.css';
 import { Navbar } from './components/Navbar';
@@ -15,16 +15,25 @@ function App() {
 		currentThemeMode, currentPalette, currentDarkBgColor, currentLightBgColor
 	} = useStateContext();
 
-	const bgColor = currentThemeMode==="dark"?currentDarkBgColor:currentLightBgColor
+	const [bgColor,setBgColor] = useState(currentThemeMode==="dark"?currentDarkBgColor:currentLightBgColor);
+
+	useEffect(()=>{
+		setBgColor(currentThemeMode==="dark"?currentDarkBgColor:currentLightBgColor)
+	},[currentThemeMode,currentPalette, currentDarkBgColor, currentLightBgColor])
 
 	return (
 		<div className="dark" style={{background:bgColor, minHeight:"100vh"}}>
 			
 			<BrowserRouter>
 				
-				<Navbar />
+			<Navbar />
+				<div style={{height:80}}></div>
 
-				<Routes>
+				<Drawer/>
+				<TopArrow bgColor={currentThemeMode === 'light' ? currentPalette.color : 'black'} />
+				
+
+				<Routes className="mt-5 bg-red-400">
 					<Route path="/" element={<Home />} />
 					<Route path="/home" element={<Home />} />
 					<Route path="/portfolio" element={<Portfolio />} />
@@ -32,10 +41,7 @@ function App() {
 					<Route path="/contact" element={<Contact />} />
 				</Routes>
 
-				<Drawer/>
-				
-
-				<TopArrow bgColor={currentThemeMode === 'light' ? currentPalette.color : 'black'} />
+			
 				
 
 			</BrowserRouter>

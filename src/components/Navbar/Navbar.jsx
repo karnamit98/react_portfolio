@@ -1,10 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { navLinks } from '../../data/dummy';
 import { Link, NavLink } from 'react-router-dom';
 import { useStateContext } from '../../contexts/ContextProvider';
 // import MenuIcon from '@mui/icons-material/Menu';
 import './style.scss';
 import useWindowSize from '../../hooks/useWindowSize';
+import naruto from '../assets/naruto.png';
+import {motion, useAnimation} from 'framer-motion';
+import {useInView} from 'react-intersection-observer';
 
 function MenuIcon({ handleChange, checkRef }) {
 	return (
@@ -21,10 +24,18 @@ function MenuIcon({ handleChange, checkRef }) {
 
 const Navbar = () => {
 	const checkRef = useRef(null);
-
+	const navRef = useRef(null);
+   
 	const { currentThemeMode, currentPalette } = useStateContext();
-
+    const [scrollY, setScrollY] = useState(window.scrollY);
+    const [scrollDirection, setScrollDirection] = useState("initial");
+    
 	const { width, height } = useWindowSize();
+    const [navStyles, setNavStyles] = useState({
+        background: 'transparent',
+        color: currentThemeMode === 'light' ? "black" : 'white',
+        // animation: 'slideUp .4s ease-out',
+    })
 
 	const [menuState, setMenuState] = useState(false);
 
@@ -32,15 +43,86 @@ const Navbar = () => {
 		e.target.checked ? setMenuState(true) : setMenuState(false);
 	};
 
+    const navLogoVariants = {
+        visible: { opacity:1, scale:1, transition:{duration:.8} },
+        hidden: {opacity:0, scale:0}
+    }
+
+
+
+    const handleScroll = useCallback((e) => {
+        console.log('scrolled! Y:',scrollY,', win:',window.scrollY, ', navHeight:',navRef.current.clientHeight)
+
+        if(window.scrollY < navRef.current.clientHeight){
+			setScrollDirection('initial');
+            setNavStyles({
+                background:'transparent',
+                color:currentThemeMode === 'light' ? "black" : 'white',
+                // animation:"slideUp .3s ease-in "
+            })
+        }
+        else if( scrollY <= window.scrollY){  //If Scrolled Down
+            // console.log('down!');
+			setScrollDirection('down');
+            setNavStyles({
+                background:'transparent',
+                color:currentThemeMode === 'light' ? "black" : 'white',
+                animation:"slideUp .3s ease-in-out forwards"
+            })
+        }
+        else{//Else Scrolled Up
+            // console.log('up!');
+			setScrollDirection('up');
+            setNavStyles({
+                background:  currentThemeMode === 'light' ? currentPalette.color : 'black',
+                color: 'white',
+                animation:"slideDown .3s ease-in forwards"
+            })
+        }
+       
+    setScrollY(window.scrollY)  
+    }, [scrollY])
+
+   
+
 	useEffect(() => {
 		if (width > 640) {
-			// console.log('menustate true');
 			setMenuState(true);
 		} else {
-			// console.log('menustate false');
 			setMenuState(false);
 		}
 	}, [width]);
+
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+          window.removeEventListener("scroll", handleScroll);
+        };
+	}, [handleScroll]);
+
+	useEffect(()=>{
+		if(scrollDirection === "down")
+		{
+			setNavStyles(oldStyles=> ({
+				...oldStyles,
+				background:'transparent',
+                color:currentThemeMode === 'light' ? "black" : 'white',
+			}))
+		} else if(scrollDirection === "up"){
+			setNavStyles(oldStyles=> ({
+				...oldStyles,
+				background:  currentThemeMode === 'light' ? currentPalette.color : 'black',
+				color: 'white',
+			}))
+		} else {
+			setNavStyles(oldStyles=> ({
+				...oldStyles,
+				background:'transparent',
+                color:currentThemeMode === 'light' ? "black" : 'white',
+			}))
+		}
+	
+	},[currentPalette,currentThemeMode])
 
 	const navLinkClasses = `my-auto mx-4  py-2 flex justify-center font-semibold
       hover:animate-pulsehover:cursor-pointer hover:underline 
@@ -49,25 +131,38 @@ const Navbar = () => {
      `;
 
 	return (
-		<div
+		<nav  ref={navRef}
 			className="container-fluid  w-100 drop-shadow-xl
-        sm:px-20 px-2
+        sm:px-20 px-2 
         "
 			style={{
-				background:
-					currentThemeMode === 'light' ? currentPalette.color : 'black',
+                
+				background: navStyles.background,
+                color: navStyles.color,
+                animation: navStyles.animation,
+                position:'fixed',
+                zIndex:'999',
+                width:'100vw',
+                transition:'all ease .4s'
+					// currentThemeMode === 'light' ? currentPalette.color : 'black',
 			}}
 		>
 			<div
-				className=" text-white py-3 px-2
+				className="  py-3 px-2
             flex flex-col justify-center sm:flex-row sm:justify-between
             "
 			>
-				<div className="bg-yellow p-1 my-auto">LOGO</div>
+				<motion.div 
+                variants={navLogoVariants}
+                initial="hidden"
+                animate="visible"
+                className="bg-yellow p-1 my-auto">
+                    <img className='object-contain h-12 w-30' src={naruto} alt="LOGO" />
+                </motion.div>
 				{width < 640 && (
 					<MenuIcon
 						checkRef={checkRef}
-						className="justify-self-end bg-black"
+						className="justify-self-end bg-blue-400 text-red-800"
 						handleChange={handleMenuState}
 					/>
 				)}
@@ -101,8 +196,9 @@ const Navbar = () => {
 				</div>
 				)}
 			</div>
-		</div>
+		</nav>
 	);
 };
+
 
 export default Navbar;

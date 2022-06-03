@@ -10,12 +10,12 @@
     position: absolute;
     // top: 50%;
     // left: 50%;
-    right:20px;
-    top:18px;
+    right:30px;
+    top:30px;
     // transform: translate(-50%, -50%);
     cursor: pointer;
     transition: 0.5s ease;
-    height: 20px;
+    height: 50px;
     &:hover .bar {
       box-shadow: 1px 1px 7px 1px RGBa(0, 0, 0, 0.3);
     }
@@ -48,7 +48,7 @@
         opacity: 0;
       }
       &:nth-child(3) {
-        margin-top: -12px;
+        margin-top: -10px;
         transform: rotate(45deg);
       }
     }
@@ -59,11 +59,11 @@
   
   }
   .mobileMenu{
-    animation:slideRight .8s ease-in-out forwards;
+    animation:bounceDown .8s ease-in-out forwards;
   }
 
 
-  @keyframes slideRight {
+  @keyframes bounceDown {
     0%{
       transform: translateY(-40%);
     }
@@ -80,3 +80,21 @@
       transform: translateY(0%);
     }
   }
+
+  @keyframes slideUp {
+    from{
+      transform: translateY(0%);
+    }
+    to{
+      transform: translateY(-100%);
+    }
+  }
+  @keyframes slideDown {
+    from{
+      transform: translateY(-100%);
+    }
+    to{
+      transform: translateY(0%);
+    }
+  }
+

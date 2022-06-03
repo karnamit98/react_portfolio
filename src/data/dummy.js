@@ -8,7 +8,7 @@ export const navLinks = [
 		href: '/portfolio',
 	},
 	{
-		name: 'About',
+		name: 'About Me',
 		href: '/about',
 	},
 	{
@@ -16,6 +16,14 @@ export const navLinks = [
 		href: '/contact',
 	},
 ];
+
+export const breakpoints = {
+    'xl':'1280',
+    'lg':'1024',
+    'md':'768',
+    'sm':'640',
+    'xs':'480',
+}
 
 // export const customColors = [
 // 	{
