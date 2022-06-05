@@ -72,7 +72,8 @@ function Drawer(props) {
 					currentThemeMode === 'light' ? currentPalette.color : 'black',
 					position:"fixed",
 					bottom:80,
-					right:20
+					right:20,
+					zIndex:1000,
 				}}
 				
 			>

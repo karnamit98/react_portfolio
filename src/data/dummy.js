@@ -23,6 +23,7 @@ export const breakpoints = {
     'md':'768',
     'sm':'640',
     'xs':'480',
+    'xxs':'380'
 }
 
 // export const customColors = [

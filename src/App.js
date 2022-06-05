@@ -9,29 +9,43 @@ import { About } from './pages/About';
 import { Contact } from './pages/Contact';
 import { Drawer } from './components/Drawer';
 import { TopArrow } from './components/TopArrow';
+import Footer from './components/Footer/Footer';
 
 function App() {
 	const {
-		currentThemeMode, currentPalette, currentDarkBgColor, currentLightBgColor
+		currentThemeMode,
+		currentPalette,
+		currentDarkBgColor,
+		currentLightBgColor,
 	} = useStateContext();
 
-	const [bgColor,setBgColor] = useState(currentThemeMode==="dark"?currentDarkBgColor:currentLightBgColor);
+	const [bgColor, setBgColor] = useState(
+		currentThemeMode === 'dark' ? currentDarkBgColor : currentLightBgColor
+	);
 
-	useEffect(()=>{
-		setBgColor(currentThemeMode==="dark"?currentDarkBgColor:currentLightBgColor)
-	},[currentThemeMode,currentPalette, currentDarkBgColor, currentLightBgColor])
+	useEffect(() => {
+		setBgColor(
+			currentThemeMode === 'dark' ? currentDarkBgColor : currentLightBgColor
+		);
+	}, [
+		currentThemeMode,
+		currentPalette,
+		currentDarkBgColor,
+		currentLightBgColor,
+	]);
 
 	return (
-		<div className="dark" style={{background:bgColor, minHeight:"100vh"}}>
-			
+		<div className="dark flex flex-col h-screen justify-between" style={{ background: bgColor, minHeight: '100vh' }}>
 			<BrowserRouter>
-				
-			<Navbar />
-				<div style={{height:80}}></div>
+				<Navbar />
+				<div style={{ height: 80 }}></div>
 
-				<Drawer/>
-				<TopArrow bgColor={currentThemeMode === 'light' ? currentPalette.color : 'black'} />
-				
+				<Drawer />
+				<TopArrow
+					bgColor={
+						currentThemeMode === 'light' ? currentPalette.color : 'black'
+					}
+				/>
 
 				<Routes className="mt-5 bg-red-400">
 					<Route path="/" element={<Home />} />
@@ -41,13 +55,8 @@ function App() {
 					<Route path="/contact" element={<Contact />} />
 				</Routes>
 
-			
-				
-
+				<Footer />
 			</BrowserRouter>
-
-			
-
 		</div>
 	);
 }

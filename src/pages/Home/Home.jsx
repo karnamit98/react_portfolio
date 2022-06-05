@@ -53,7 +53,7 @@ function Home(props) {
 
             {/* <ImageSlider/> */}
 
-            <ProfileHeader />
+            <ProfileHeader className="my-auto" style={{}} />
 
 
             <section style={{height:"100vh"}}  className="flex justify-center align-middle">

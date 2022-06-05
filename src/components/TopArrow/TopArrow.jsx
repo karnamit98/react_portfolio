@@ -11,7 +11,8 @@ function TopArrow({bgColor}) {
             background: bgColor,
             position:"fixed",
             bottom:20,
-            right:20
+            right:20,
+            zIndex:1000,
         }}
         >
             <NavigationIcon className='text-white text-3xl' />

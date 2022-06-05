@@ -96,7 +96,8 @@ module.exports = {
 			},
 			fontFamily: {
 				montserrat: ['Montserrat', ...defaultTheme.fontFamily.sans],
-				roboto_condensed: ['Roboto Condensed',  ...defaultTheme.fontFamily.sans]
+				roboto_condensed: ['Roboto Condensed',  ...defaultTheme.fontFamily.sans],
+				poppins: ['Poppins',  ...defaultTheme.fontFamily.sans]
 			},
 			animation: {
 				wiggle: 'wiggle 1s ease-in-out infinite',

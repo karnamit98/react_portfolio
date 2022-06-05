@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import './style.scss';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import { useStateContext } from '../../contexts/ContextProvider';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
-import avatarImg from './avatar2.webp';
-import Avatar from '@mui/material/Avatar';
+import CircularAvatar from './CircularAvatar';
 import useWindowSize from '../../hooks/useWindowSize';
 import { breakpoints } from '../../data/dummy';
 
@@ -24,30 +22,138 @@ function ProfileHeader(props) {
 	const containerController = useAnimation();
 
 	const { width, height } = useWindowSize();
+	const [headerMarginTop, setHeaderMarginTop] = useState(
+		width <= breakpoints.xxs ? '100px'
+		: width <= breakpoints.xs
+		? '140px'
+		: width <= breakpoints.sm
+		? '180px'
+		: '200px'
+    );
 
-	useEffect(() => {}, [width]);
+	const line1 = 'Software Developer';
+	const line2 = 'Amit Karn';
+	const line3 =
+		'	Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis \
+    eveniet numquam, temporibus fugit corrupti fuga veniam dolor. Eaque \
+    non ullam iure facilis veritael labore earum totam quasi libero \
+    magni.';
+
+	useEffect(() => {
+		setHeaderMarginTop(
+			width <= breakpoints.xxs ? '100px'
+			: width <= breakpoints.xs
+			? '140px'
+			: width <= breakpoints.sm
+			? '180px'
+			: '200px'
+		)
+	}, [width]);
 
 	const containerVariants = {
 		hidden: {
-			// rotateX: '59deg',
 			skew: '10deg,-40deg',
-			// translateY:'-100%',
 			opacity: 0,
 			scale: 0,
 		},
 		visible: {
-			// rotateX: '0deg',
 			skew: '0',
-			// translateY:'0%',
 			opacity: 1,
 			scale: 1,
 			transition: { duration: 0.5 },
 		},
 	};
 
+	const header1Variant = {
+		hidden: { opacity: 0, left:-200, },
+		show: {
+			opacity: 1,
+			left:0,
+			transition: {
+				delay: .7,
+				staggerChildren: 0.08,
+			},
+		},
+	}
+	const header2Variant = {
+		hidden: { opacity: 0, },
+		show: {
+			opacity: 1,
+			transition: {
+				delay: .8 ,
+				staggerChildren: 0.2,
+			},
+		},
+	}
+	const sentence = {
+		hidden: { opacity: 1 },
+		show: {
+			opacity: 1,
+			transition: {
+				delay: .8,
+				staggerChildren: 0.08,
+			},
+		},
+	};
+	
+	const header2Letter = {
+		hidden: {
+			opacity: 0,
+			scale: 0,
+			top: 100,
+		},
+		show: {
+			opacity: 1,
+			scale:1,
+			top: 0,
+		},
+	}
+
+	const letter = {
+		hidden: {
+			opacity: .6,
+			top: -40,
+		},
+		show: {
+			opacity: 1,
+			top: 0,
+		},
+	};
+
+	const buttonVariant = {
+		hidden: { opacity: 0, right: -1000},
+		show: {
+			opacity: 1,
+			right:0,
+			transition: {
+				delay: .8,
+			},
+		},
+	}
+
+	const container = {
+		hidden: { rotate: 90 },
+		show: {
+			rotate: 0,
+			transition: {
+				staggerChildren: 0.5,
+				delayChildren: 0.1,
+			},
+		},
+	};
+	const itemA = {
+		hidden: { opacity:0,scale:0, top: -400, left:-500,rotate:'-360deg',},
+		show: {  opacity:1,scale:1, top: 0, left:0,rotate:'0deg' },
+	};
+
+	const itemB = {
+		hidden: { opacity:0,scale:0, top: -400, right:-800,rotate:'-360deg',},
+		show: {  opacity:1,scale:1, top: 0, right:0,rotate:'0deg' },
+	};
+
 	useEffect(() => {
 		if (containerInView) {
-			containerController.start('visible');
+			containerController.start('show');
 		} else {
 			containerController.start('hidden');
 		}
@@ -59,103 +165,129 @@ function ProfileHeader(props) {
 	}, [currentPalette, currentThemeMode]);
 
 	return (
-		<div>
-			<div
+		<AnimatePresence className="mt-20 ">
+			<motion.div
 				className="md:container mx-auto flex flex-col sm:flex-row
             justify-center gap-4 w-100 
+		
              "
 				style={{
-					marginTop:'120px'
-						// width < breakpoints.xs
-						// 	? '20px'
-						// 	: width < breakpoints.sm
-						// 	? '40px'
-						// 	: width < breakpoints.md
-						// 	? '80px'
-						// 	: '120px',
+					 marginTop: headerMarginTop, //'120px',
 				}}
+				ref={containerRef}
+				variants={container}
+				initial="hidden"
+				animate={containerController}
+				exit={{ x: -300, opacity: 0 }}
 			>
-				{/* <Box sx={{ background: '#cfe8fc', height: '100vh' }} 
-                   ref={containerRef}
-                   variants={containerVariants}
-                   initial="hidden"
-                   animate={containerController}
-                   component={motion.div}
-                >
-                </Box> */}
-
-				<div
-					className="self-center avatarContainer"
+				<motion.div
+					className="self-center avatarContainer "
 					style={{
-						background: layoutBg,
-						// margin: (width<breakpoints.xs)?'5px':( width<breakpoints.sm ? '10px' : (width<breakpoints.md?'14px':'20px'))
+						background:  layoutBg, //'#444', //
+						position: 'relative',
 					}}
+					variants={itemA}
 				>
-					<Avatar
-						className="avatarImg "
-						alt="Avatar Image"
-						src={avatarImg}
-						sx={{
-							width: {
-								md: 290,
-								sm: 190,
-								xs: 100,
-							},
-							height: {
-								md: 300,
-								sm: 200,
-								xs: 110,
-							},
-							margin: {
-								xl: '28px',
-								md: '22px',
-								sm: '16px',
-								xs: '10px',
-							},
-						}}
-					/>
-				</div>
+					<CircularAvatar layoutBg={layoutBg} />
+				</motion.div>
 
 				<Box
 					className=" self-center p-5 font-montserrat text-left sm:p-10 md:p-15"
 					sx={{
 						color: layoutFg,
-						// background:"red",
 						width: {
 							md: '40%',
 							sm: '100%',
 							xs: '100%',
 						},
-						// height: {
-						//     md:300,
-						//     sm:200,
-						//     xs:110
-						// },
+						position: 'relative',
 					}}
+					component={motion.div}
+					variants={itemB}
 				>
-					<p className="my-2 text-base">Software Developer</p>
+					<motion.p
+						className="my-2 text-sm ml-1 font-semibold "
+						style={{
+							color: layoutFg,
+						}}
+						variants={header1Variant}
+						initial="hidden"
+						animate={containerController}
+					>
+						{line1.split('').map((char, index) => {
+							return (
+								<motion.span  style={{position:'relative',}} key={char + '-' + index} variants={letter}>
+									{' '}
+									{char}
+								</motion.span>
+							);
+						})}
+					</motion.p>
 
-					<p className="my-2 font-bold text-5xl">Amit Karn</p>
-
-					<p className="my-2 text-xl">
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis
-						eveniet numquam, temporibus fugit corrupti fuga veniam dolor. Eaque
-						non ullam iure facilis veritael labore earum totam quasi libero
-						magni.
+					<p
+						className="my-2 font-bold text-5xl font-poppins"
+						style={{ height: 60 }}
+					>
+						<motion.span
+							className="nameText"
+							style={{
+								WebkitTextStroke: `2px ${layoutFg}`,
+							}}
+							variants={header2Variant}
+							initial="hidden"
+							animate={containerController}
+						>
+							{line2.split('').map((char, index) => {
+								return (
+									<motion.span  key={char + '-' + index} variants={header2Letter}>
+										{char}
+									</motion.span>
+								);
+							})}
+						</motion.span>
+						<motion.span
+							className="nameText"
+							style={{
+								color: layoutFg,
+							}}
+							variants={header2Variant}
+							initial="hidden"
+							animate={containerController}
+						>
+							{line2.split('').map((char, index) => {
+								return (
+									<motion.span  key={char + '-' + index} variants={header2Letter} >
+										{char}
+									</motion.span>
+								);
+							})}
+						</motion.span>
 					</p>
 
-					<div className="my-2 flex flex-row  gap-3">
+					<motion.p
+						className="my-4 text-sm font-semibold leading-7"
+						variants={sentence}
+						initial="hidden"
+						animate={containerController}
+					>
+						{/* {line3.split('').map((char, index) => {
+							return (
+								<motion.span style={{position:'relative',}} key={char + '-' + index} variants={letter}
+								whileHover={{color: "#1089ff",transform: 'scale(2)',}}
+								>
+									{char}
+								</motion.span>
+							);
+						})} */}
+						{line3}
+					</motion.p>
+
+					<motion.div className="my-5 flex flex-row  gap-3 font-bold" style={{position:'relative'}} variants={buttonVariant} >
 						<button className=" btnCv self-center">downloadCV</button>
-                        {/* <button className=" btnContact self-center">Contact</button> */}
-						{/* <button class="btnContact-pushable self-center" role="button">
-							<span class="btnContact-shadow"></span>
-							<span class="btnContact-edge"></span>
-							<span class="btnContact-front text">Contact Me</span>
-						</button> */}
-					</div>
+					</motion.div>
 				</Box>
-			</div>
-		</div>
+			</motion.div>
+		</AnimatePresence>
 	);
 }
 
