@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import avatarImg from './avatar.jpg';
+import avatarImg from './av3.jpg';
 import Avatar from '@mui/material/Avatar';
 import { breakpoints } from '../../data/dummy';
 import useMousePosition from '../../hooks/useMousePosition';

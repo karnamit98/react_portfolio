@@ -10,6 +10,9 @@ import { Contact } from './pages/Contact';
 import { Drawer } from './components/Drawer';
 import { TopArrow } from './components/TopArrow';
 import Footer from './components/Footer/Footer';
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 	const {
@@ -33,10 +36,14 @@ function App() {
 		currentDarkBgColor,
 		currentLightBgColor,
 	]);
-
+	// const notify = () => toast("Wow so easy !");
 	return (
 		<div className="dark flex flex-col h-screen justify-between" style={{ background: bgColor, minHeight: '100vh' }}>
 			<BrowserRouter>
+			{/* <button onClick={notify}>Notify !</button> */}
+			<ToastContainer closeButton={true}  pauseOnFocusLoss={false} 
+			theme={currentThemeMode === 'dark' ? 'dark' : 'colored'}
+			/>
 				<Navbar />
 				<div style={{ height: 80 }}></div>
 

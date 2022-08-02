@@ -60,9 +60,7 @@ export const ContextProvider = ({ children }) => {
     const setThemeMode = () => {
         const currThemeMode = localStorage.getItem('colorMode')?localStorage.getItem('colorMode'):currentThemeMode;
         setCurrentThemeMode( currThemeMode==="light"?"dark":"light" ) ;
-        localStorage.setItem('colorMode', currThemeMode==="light"?"dark":"light" );
-
-        
+        localStorage.setItem('colorMode', currThemeMode==="light"?"dark":"light" );   
     }
 
     useEffect(()=>{
@@ -75,6 +73,7 @@ export const ContextProvider = ({ children }) => {
         localStorage.setItem('lightBgColor', lightBgColor );
     },[currentThemeMode, currentPalette])
     
+
    
     return (
 		<StateContext.Provider

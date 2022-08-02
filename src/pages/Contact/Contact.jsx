@@ -10,13 +10,16 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import SendIcon from '@mui/icons-material/Send';
 import LanguageIcon from '@mui/icons-material/Language';
 
+import { ToastContainer, toast } from 'react-toastify';
 
-const InputField = ({ label, id, type, required, placeholder, currentFg }) => {
+const InputField = ({ label, id, type, required, placeholder, currentFg, val, setVal }) => {
 	return (
 		<div className="relative z-0 w-full mb-6 group">
 			<input
 				type={type}
 				id={id}
+				value={val}
+				onChange={e=>setVal(e.target.value)}
 				className="block py-2.5 px-0 w-full font-semibold text-sm text-gray-900 bg-transparent border-0 
                 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 
                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -44,7 +47,7 @@ const InputField = ({ label, id, type, required, placeholder, currentFg }) => {
 	);
 };
 
-const TextArea = ({ label, id, type, required, placeholder, currentFg }) => {
+const TextArea = ({ label, id, type, required, placeholder, currentFg,val,setVal }) => {
 	return (
 		<div className="relative z-0 w-full mb-6 group">
 			<label
@@ -60,6 +63,8 @@ const TextArea = ({ label, id, type, required, placeholder, currentFg }) => {
 			<textarea
 				id={id}
 				rows="4"
+				value={val}
+				onChange={e=>setVal(e.target.value)}
 				// className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border
 				// border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700
 				// dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
@@ -109,6 +114,8 @@ const ContactInfo = ({children , header, content}) => {
 	);
 };
 
+
+
 function Contact(props) {
 	const ariaLabel = { 'aria-label': 'Full Name' };
 
@@ -122,6 +129,9 @@ function Contact(props) {
 	);
 
 	const [name, setName] = useState('');
+	const [email, setEmail] = useState('');
+	const [subject, setSubject] = useState('');
+	const [message, setMessage] = useState('');
     const [contactWidth, setContactWidth] = useState(
         width <= breakpoints.xxs ? '250px'
         : width <= breakpoints.xs
@@ -148,6 +158,51 @@ setContactWidth(
 							: '500px'
 )
     },[width])
+
+
+	
+	// const notify = () => toast("Wow so easy !");
+	let handleSubmit = async (e) => {
+		e.preventDefault();
+		
+		
+
+		try {
+		  let res = await fetch("http://127.0.0.1:8000/api/contact-form-info/create", {
+			method: "POST",
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			  },
+			body: JSON.stringify({
+			  name: name,
+			  email: email,
+			  subject: subject,
+			  message: message,
+			}),
+		  });
+		  let resJson = await res.json();
+		  if (res.status === 201) {
+			setName("");
+			setEmail("");
+			setMessage("");
+			setSubject("");
+			toast.success("Thank you for contacting!", {
+				position: toast.POSITION.TOP_RIGHT
+			  });
+		  } else {
+			// setMessage("");
+			toast.error("Failed to contact!", {
+				position: toast.POSITION.TOP_RIGHT
+			  });
+		  }
+		} catch (err) {
+		  console.log(err);
+		  toast.error("Failed to contact!", {
+			position: toast.POSITION.TOP_RIGHT
+		  });
+		}
+	  };
 
 	return (
 		<div
@@ -190,7 +245,8 @@ setContactWidth(
 				</div>
 			</div>
 
-			<div
+			<form
+				onSubmit={handleSubmit}
 				className=" flex flex-col 
         justify-center gap-4 w-100 p-10 "
 				// style={{ background: currentBg }}
@@ -211,6 +267,8 @@ setContactWidth(
 						type="text"
 						required="true"
 						placeholder=" "
+						val={name}
+						setVal={setName}
 						currentFg={currentFg}
 					/>
 					<InputField
@@ -219,6 +277,8 @@ setContactWidth(
 						type="email"
 						required="true"
 						placeholder=" "
+						val={email}
+						setVal={setEmail}
 						currentFg={currentFg}
 					/>
 				</div>
@@ -229,6 +289,8 @@ setContactWidth(
 					type="text"
 					required="true"
 					placeholder=" "
+					val={subject}
+					setVal={setSubject}
 					currentFg={currentFg}
 				/>
 
@@ -238,9 +300,20 @@ setContactWidth(
 					type="text"
 					required="true"
 					placeholder=" "
+					val={message}
+					setVal={setMessage}
 					currentFg={currentFg}
 				/>
-			</div>
+
+				<button type="submit" 
+		
+				className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+				style={{
+					background: currentBg,}}
+				>
+				Button
+				</button>
+			</form>
 		</div>
 	);
 }

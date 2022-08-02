@@ -4,8 +4,19 @@ import NavigationIcon from '@mui/icons-material/Navigation';
 
 
 function TopArrow({bgColor}) {
+
+    const scrollToTop = () =>{
+        window.scrollTo({
+          top: 0, 
+          behavior: 'smooth'
+          /* you can also use 'auto' behaviour
+             in place of 'smooth' */
+        });
+      };
+
     return (
         <IconButton
+        onClick={scrollToTop}
         className='hover:shadow-2xl animate-bounce paletteButton'
         style={{
             background: bgColor,
