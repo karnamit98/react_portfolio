@@ -15,6 +15,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+
+	// console.log('asd',process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DEV_MODE : process.env.REACT_APP_PRO_MODE);
+
 	const {
 		currentThemeMode,
 		currentPalette,
@@ -39,6 +42,7 @@ function App() {
 	// const notify = () => toast("Wow so easy !");
 	return (
 		<div className="dark flex flex-col h-screen justify-between" style={{ background: bgColor, minHeight: '100vh' }}>
+			
 			<BrowserRouter>
 			{/* <button onClick={notify}>Notify !</button> */}
 			<ToastContainer closeButton={true}  pauseOnFocusLoss={false} 

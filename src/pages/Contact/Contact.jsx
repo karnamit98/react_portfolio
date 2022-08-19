@@ -11,6 +11,10 @@ import SendIcon from '@mui/icons-material/Send';
 import LanguageIcon from '@mui/icons-material/Language';
 
 import { ToastContainer, toast } from 'react-toastify';
+// import "dotenv/config"
+// require('dotenv/config')
+
+
 
 const InputField = ({ label, id, type, required, placeholder, currentFg, val, setVal }) => {
 	return (
@@ -117,6 +121,8 @@ const ContactInfo = ({children , header, content}) => {
 
 
 function Contact(props) {
+	// require('dotenv').config()
+	// console.log('PROCESS:',process.env,'URL::',process.env.BACKEND_URL)
 	const ariaLabel = { 'aria-label': 'Full Name' };
 
 	const { width, height } = useWindowSize();
@@ -168,7 +174,8 @@ setContactWidth(
 		
 
 		try {
-		  let res = await fetch("http://127.0.0.1:8000/api/contact-form-info/create", {
+		//   let res = await fetch("http://127.0.0.1:8000/api/contact-form-info/create", {
+			let res = await fetch(process.env.REACT_APP_BACKEND_URL+"/api/contact-form-info", {
 			method: "POST",
 			headers: {
 				'Accept': 'application/json',
@@ -182,6 +189,7 @@ setContactWidth(
 			}),
 		  });
 		  let resJson = await res.json();
+		//   console.log('RESPONSE',resJson)
 		  if (res.status === 201) {
 			setName("");
 			setEmail("");
